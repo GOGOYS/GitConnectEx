@@ -1,0 +1,20 @@
+package com.heavenstar.zandi.config;
+
+import java.io.IOException;
+
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
+
+public class GithubApi {
+	
+	
+	GitHub github;
+	String token = "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";
+	
+	private void connecToGithub(String token) throws IOException {
+		
+		github = new GitHubBuilder().withOAuthToken(token).build();
+        github.checkApiUrlValidity(); 
+	}
+
+}
