@@ -13,7 +13,7 @@ public class GithubApi {
 	
 	
 	  GitHub github;
-	    String token = "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";
+	    String token = "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";
 	    
 	    public PagedIterator<GHCommit> getCommits(String userId) {
 	    	try {
