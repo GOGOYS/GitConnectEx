@@ -1,39 +1,34 @@
 package com.heavenstar.zandi.config;
 
-import java.io.IOException;
+import java.util.logging.Logger;
 
-import org.kohsuke.github.GHCommit;
-import org.kohsuke.github.GHCommitSearchBuilder;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
-import org.kohsuke.github.PagedIterator;
-import org.kohsuke.github.PagedSearchIterable;
+import org.springframework.stereotype.Controller;
 
+
+@Controller
 public class GithubApi {
+	 	private static final String personalToken = "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";
+	 	private static final Logger LOG = Logger.getGlobal();
+	    private GitHub github;
 	
-	
-	  GitHub github;
-	    String token = "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";
-	    
-	    public PagedIterator<GHCommit> getCommits(String userId) {
-	    	try {
-	        	connectToGithub(token); 
-	        } 
-	        catch (IOException e) { 
-	        	throw new IllegalArgumentException("failed to connect gitHub");
+	    public GithubApi() {
+	        try {// 깃허브 객체 생성
+	            this.github = new GitHubBuilder().withOAuthToken(personalToken).build();
+	            LOG.info("깃 토큰 연결 성공");
+	        } catch (Exception e) {
+	            LOG.info("깃 토큰 연결 실패");
 	        }
-	        
-	        GHCommitSearchBuilder builder = github.searchCommits() 
-	       		.author(userId)
-	            	.sort(GHCommitSearchBuilder.Sort.AUTHOR_DATE); 
-	        
-	        PagedSearchIterable<GHCommit> commits = builder.list().withPageSize(7);
-	        return commits._iterator(1);
-	    } 
-	    
-	    private void connectToGithub(String token) throws IOException {
-	    	github = new GitHubBuilder().withOAuthToken(token).build();
-	        github.checkApiUrlValidity(); 
 	    }
+
+	    public GitHub getConnection() {
+	        return github;
+	    }
+	    
+	    public Logger getLog() {
+	        return LOG;
+	    }
+	        
 
 }

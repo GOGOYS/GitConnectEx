@@ -11,16 +11,5 @@ import com.heavenstar.zandi.config.GithubApi;
 @Controller(value="/git")
 public class GitController {
 	
-	@Autowired
-	private GithubApi gitapi;
 	
-	
-	@RequestMapping(value={"/",","},method=RequestMethod.GET)
-	public String home() {
-		
-		gitapi.getCommits("GOGOYS");
-		
-		return "home";
-		
-	}
 }
