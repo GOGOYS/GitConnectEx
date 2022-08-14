@@ -4,17 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.XML;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heavenstar.zandi.config.GithubConfig;
 import com.heavenstar.zandi.service.GitService;
 
@@ -29,7 +27,8 @@ public class GitServiceImpl implements GitService{
 	private GithubConfig token;
 
 	@Override
-	public String gitcommit(String id, String repo) throws IOException {
+	public String gitcommit(String id, String repo) throws IOException, ParseException {
+		//가장 최근 커밋
 		
 		
 		String url = " https://api.github.com/repos/" + id + "/" + repo + "/commits";
@@ -57,31 +56,24 @@ public class GitServiceImpl implements GitService{
         
         log.debug("아아아아: {}",retString);
         
-        JSONObject json = XML.toJSONObject(retString);
-        String jsonStr = json.toString(4);
+        //문자열을  JSON 객체로 변환
+        JSONParser parse = new JSONParser();
+        JSONArray arr = (JSONArray)parse.parse(retString);
+        log.debug("에에에: {}",arr);
         
-        JSONObject jObject = new JSONObject(jsonStr);
+        log.debug("오오오오: {}", arr.get(0));
+        JSONObject obj = (JSONObject)arr.get(0);
+       
+        JSONObject commit = (JSONObject)obj.get("commit");
+        log.debug("커밋뭉치 : {}",commit);
         
-      //response 안으로
-        JSONObject response = jObject.getJSONObject("commit");
-        //log.debug(response.toString(4));
+        JSONObject commiter = (JSONObject)commit.get("committer");
+        log.debug("커밋한사람 : {}",commiter);
+        String message = (String)commit.get("message");
         
-        // body 안으로
-        JSONObject body = response.getJSONObject("body");
-        //log.debug(body.toString(4));
-        
-        //items 안으로
-        JSONObject items = body.getJSONObject("items");
-        //log.debug(items.toString(4));
-        
-        //item은 배열로 생성
-        JSONArray item = items.getJSONArray("item");
-        JSONObject it = item.getJSONObject(0);
-        String itto = it.toString();
-        
-        ObjectMapper mapper = new ObjectMapper();
+        log.debug("내용 : {}",message);
 
-		return "a";
+		return null;
 	
 	}
 	
