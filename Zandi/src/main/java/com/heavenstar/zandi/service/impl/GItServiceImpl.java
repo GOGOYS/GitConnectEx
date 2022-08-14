@@ -1,65 +1,90 @@
 package com.heavenstar.zandi.service.impl;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 
-import org.kohsuke.github.GHIssue;
-import org.kohsuke.github.GHIssueComment;
-import org.kohsuke.github.GHIssueState;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
-import org.kohsuke.github.GitHubBuilder;
-import org.kohsuke.github.PagedIterable;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.heavenstar.zandi.config.GithubConfig;
+import com.heavenstar.zandi.service.GitService;
+
+import lombok.extern.slf4j.Slf4j;
 
 
-
-public class GItServiceImpl {
+@Slf4j
+@Service
+public class GitServiceImpl implements GitService{
 	
-	public static void main(String[] args) throws IOException {
-        // jwt token을 사용하여 auth
-        String my_jwt_token = "";
-        GitHub gitHub = new GitHubBuilder().withOAuthToken(my_jwt_token).build();
+	@Autowired
+	private GithubConfig token;
 
-        // repository 할당
-        GHRepository repository = gitHub.getRepository("GOGOYS/Zandi");
-
-        // issue 리스트
-        List<GHIssue> issues = repository.getIssues(GHIssueState.ALL);
-        Map<String, int[]> participantHash = new HashMap<String, int[]>();
-
-        for (int i = 0; i < issues.size(); i++) {
-            PagedIterable<GHIssueComment> ghIssueComments = issues.get(i).listComments();
-            for (GHIssueComment ghIssueComment : ghIssueComments) {
-                String userName = ghIssueComment.getUser().getName();
-
-                if(participantHash.containsKey(userName)) {
-                    int[] ints = participantHash.get(userName);
-                    ints[i] = 1;
-                }
-                else {
-                    int[] ints = new int[issues.size()];
-                    ints[i] = 1;
-                    participantHash.put(userName, ints);
-                }
-            }
+	@Override
+	public String gitcommit(String id, String repo) throws IOException {
+		
+		
+		String url = " https://api.github.com/repos/" + id + "/" + repo + "/commits";
+		
+		//파일 읽어들이기
+        URL realUrl = new URL(url);
+        HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Content-type", "application/json");
+//        // log.debug("Response code: " + conn.getResponseCode());
+        BufferedReader rd;
+        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } else {
+            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
         }
+        
+        String retString = "";
+        String line;
+        while((line = rd.readLine()) != null) {
+        	retString += line;
+        }
+        rd.close();
+        conn.disconnect();
+        
+        log.debug("아아아아: {}",retString);
+        
+        JSONObject json = XML.toJSONObject(retString);
+        String jsonStr = json.toString(4);
+        
+        JSONObject jObject = new JSONObject(jsonStr);
+        
+      //response 안으로
+        JSONObject response = jObject.getJSONObject("commit");
+        //log.debug(response.toString(4));
+        
+        // body 안으로
+        JSONObject body = response.getJSONObject("body");
+        //log.debug(body.toString(4));
+        
+        //items 안으로
+        JSONObject items = body.getJSONObject("items");
+        //log.debug(items.toString(4));
+        
+        //item은 배열로 생성
+        JSONArray item = items.getJSONArray("item");
+        JSONObject it = item.getJSONObject(0);
+        String itto = it.toString();
+        
+        ObjectMapper mapper = new ObjectMapper();
 
-        participantHash.forEach(
-                (key, value) -> {
-                    System.out.print("| " + key + " | ");
-                    int value_sum = 0;
-                    for (int i : value) {       // 1: 참여, 0: 미참여
-                        System.out.print("." + i);
-                        value_sum += i;
-                    }
-                    float percent = (value_sum * 100)/issues.size();
-                    System.out.println(" | " + String.format("%.2f", percent) + "% |");
-
-                }
-
-        );
-    }
+		return "a";
+	
+	}
+	
+	
 
 }

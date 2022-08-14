@@ -1,5 +1,9 @@
 package com.heavenstar.zandi.service;
 
-public interface GitService {
+import java.io.IOException;
 
+public interface GitService {
+	
+	public String gitcommit(String id, String repo) throws IOException;
+	
 }

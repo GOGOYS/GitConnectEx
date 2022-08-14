@@ -1,2 +1,0 @@
-127.0.0.1 - - [12/Aug/2022:17:16:52 +0900] "GET / HTTP/1.1" 404 807
-0:0:0:0:0:0:0:1 - - [12/Aug/2022:17:16:52 +0900] "GET /zandi/WEB-INF/classes/com/heavenstar/zandi/config/GithubApi.java HTTP/1.1" 404 721

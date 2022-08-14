@@ -7,6 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
+<form>
+	<input name="username">
+	<input name="password">
+	<button>전송</button>
+</form>
 
 </body>
 </html>
