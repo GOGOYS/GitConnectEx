@@ -10,10 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.heavenstar.zandi.config.GithubConfig;
 import com.heavenstar.zandi.service.GitService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class GitServiceImpl implements GitService{
 	
-	@Autowired
-	private GithubConfig token;
 
 	@Override
 	public String gitcommit(String id, String repo) throws IOException, ParseException {

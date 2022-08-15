@@ -4,5 +4,7 @@ public class UserVO {
 	
 	public String username;
 	public String password;
+	public String nickname;
+	public String email;
 
 }
