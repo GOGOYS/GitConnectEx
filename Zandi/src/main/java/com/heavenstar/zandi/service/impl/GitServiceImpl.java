@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,6 +15,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.heavenstar.zandi.model.GitCommitVO;
 import com.heavenstar.zandi.service.GitService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +28,7 @@ public class GitServiceImpl implements GitService{
 	
 
 	@Override
-	public String gitcommit(String id, String repo) throws IOException, ParseException {
+	public GitCommitVO gitcommit(String id, String repo) throws IOException, ParseException {
 		//가장 최근 커밋
 		
 		
@@ -63,15 +68,30 @@ public class GitServiceImpl implements GitService{
         JSONObject commit = (JSONObject)obj.get("commit");
         log.debug("커밋뭉치 : {}",commit);
         
-        JSONObject commiter = (JSONObject)commit.get("committer");
-        log.debug("커밋한사람 : {}",commiter);
-        String message = (String)commit.get("message");
+        String json = commit.toString();
+        log.debug("미미:{}",json);
         
-        log.debug("내용 : {}",message);
+        ObjectMapper mapper = new ObjectMapper();
+        GitCommitVO gitVO = mapper.readValue(json, GitCommitVO.class);
+        log.debug("마마마:{}",gitVO.toString());
 
-		return null;
+		return gitVO;
 	
 	}
+
+	@Override
+	public String dataTransate(String date) {
+		LocalDateTime localDateTime = LocalDateTime.now();
+		
+		String strDate2 = "2022-08-15T07:27:29Z";
+		DateTimeFormatter format2 = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm");
+
+		LocalDate strToLocalDateTime2 = LocalDate.parse(strDate2, format2);
+		log.debug("strToLocalDateTime2 : " + strToLocalDateTime2);
+		return null;
+	}
+	
+	
 	
 	
 

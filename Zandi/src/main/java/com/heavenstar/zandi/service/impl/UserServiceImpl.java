@@ -15,11 +15,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserDao userDao;
-	
-	@Bean
-	private void create_tbl_user() {
-		userDao.create_user_table();
-	}
+
 
 	@Override
 	public List<UserVO> selectAll() {
@@ -41,7 +37,8 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int insert(UserVO userVO) {
 		// TODO Auto-generated method stub
-		return userDao.insert(userVO);
+		userDao.insert(userVO);
+		return 0;
 	}
 
 	@Override
