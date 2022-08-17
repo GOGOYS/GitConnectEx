@@ -1,6 +1,7 @@
 package com.heavenstar.zandi.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -40,13 +41,14 @@ public class GitController {
 		
 		UserVO username = (UserVO)session.getAttribute("USER");
 		
-		GitCommitVO gitVO = gitService.gitcommit(username.getUsername(),repo);
-		log.debug("개굴:{}",gitVO.toString());
-		
+		GitCommitVO gitVO = gitService.oneCommit(username.getUsername(),repo);
 		gitVO.setReponame(repo);
-		
 		model.addAttribute("REPO",gitVO);
-		model.addAttribute("DATE",gitVO.getCommitter());
+		
+		List<GitCommitVO> gitList = gitService.allCommit(username.getUsername(), repo);
+		model.addAttribute("GITLIST",gitList);
+		
+
 
 		return "git/home";
 	}
