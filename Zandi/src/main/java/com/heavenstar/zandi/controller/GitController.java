@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.heavenstar.zandi.model.GitCommitVO;
+import com.heavenstar.zandi.model.ReadmeVO;
 import com.heavenstar.zandi.model.UserVO;
 import com.heavenstar.zandi.service.GitService;
 import com.heavenstar.zandi.service.UserService;
@@ -41,12 +42,20 @@ public class GitController {
 		
 		UserVO username = (UserVO)session.getAttribute("USER");
 		
+		//한개 커밋 가져오기
 		GitCommitVO gitVO = gitService.oneCommit(username.getUsername(),repo);
 		gitVO.setReponame(repo);
 		model.addAttribute("REPO",gitVO);
 		
+		//리드미 가져오기
+		ReadmeVO readmeVO = gitService.getReadme(username.getUsername(),repo);
+		model.addAttribute("READEME",readmeVO);
+		
+		//여러개 커밋 가져오기
 		List<GitCommitVO> gitList = gitService.allCommit(username.getUsername(), repo);
 		model.addAttribute("GITLIST",gitList);
+		
+		
 		
 
 

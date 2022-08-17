@@ -10,10 +10,11 @@
 <body>
 	<h1>My Zandi</h1>
 
+	<div>레파지토리 이름: ${REPO.reponame}</div>
+	<div>README : ${README.content}</div>
 	<h3>커밋 한개</h3>
 	<c:if test="${not empty REPO }" >
 		<div class="repo-container">
-	 		<div>레파지토리 이름: ${REPO.reponame}</div>
 	 		<div>깃 내용 : ${REPO.message}</div>
 	 		<div>커밋 날짜 : ${REPO.committer.date}</div>
 	 	</div>

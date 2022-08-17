@@ -1,5 +1,7 @@
 package com.heavenstar.zandi.model;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +21,7 @@ public class UserVO {
 	public String password;
 	public String nickname;
 	public String email;
+	
+	List<GitCommitVO> gitList;
 
 }
