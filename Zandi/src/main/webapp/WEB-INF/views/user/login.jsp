@@ -9,6 +9,9 @@
 </head>
 <body>
 <h1>로그인</h1>
+	<c:if test="${error == 'LOGIN_FAIL'}">
+		<div>아이디나 비밀번호가 틀렸습니다</div>
+	</c:if>
 	<form method="POST">
 		<input name="username">
 		<input name="password">

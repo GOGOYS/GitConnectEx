@@ -7,6 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Base64.Decoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -193,6 +195,24 @@ public class GitServiceImpl implements GitService{
 		
 		return dateTime;
 		
+	}
+
+
+	@Override
+	public String readmeTransate(String readme) {
+		
+		String text = readme;
+        byte[] targetBytes = text.getBytes();
+        
+        log.debug("text:{}",text);
+        log.debug("byte[]:{}",targetBytes);
+
+		
+        Decoder decoder = Base64.getDecoder();
+        byte[] decodedBytes = decoder.decode(targetBytes);
+		
+		log.debug("디코딩:{}",decodedBytes);
+		return null;
 	}
 
 

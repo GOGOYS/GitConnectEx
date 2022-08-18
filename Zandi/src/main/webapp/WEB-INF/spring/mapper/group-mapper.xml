@@ -9,39 +9,55 @@
  		SELECT * FROM tbl_group
  	</select>
  	<select id="findByGroup" resultType="GroupVO">
- 		SELECT * FROM tbl_group WHERE g_name = #{g_name}
+ 		SELECT * FROM tbl_group WHERE g_seq = #{g_seq}
  	</select>
- 	<select id="findByJoinPeople" resultType="GroupVO">
- 		SELECT g_name, ????
- 			FROM tbl_group 
- 			LEFT JOIN tbl_join_group
- 				ON g_name = j_gname
+ 	<select id="findByGroupPeople" resultType="GroupVO">
+ 		SELECT * FROM tbl_join_group 
+ 			WHERE j_gname = #{j_gname}
  	</select>
 
  	<insert id="insert" parameterType="GroupVO">
 		INSERT INTO tbl_group(
+			g_seq,
 			g_name,
 			g_people,
 			g_enddate
 		)VALUES(
+			#{g_seq},
 			#{g_name},
 			#{g_people},
 			#{g_enddate}
 		)
  	</insert>
+ 	
+ 	<insert id="insertPeople" parameterType="GroupVO">
+ 		INSERT INTO tbl_join_group(
+ 			j_seq,
+			j_gname,
+			j_username
+ 		)VALUES(
+ 			#{j_seq},
+			#{j_gname},
+			#{j_username}
+ 		)
+ 	</insert>
  	<update id="update" parameterType="GroupVO">
 
  	</update>
- 	<delete id="delete">
-
+ 	<delete id="delete" >
+		DELETE tbl_group WHERE g_seq = #{g_seq}
+ 	</delete>
+ 	
+ 	<delete id="deletePeople">
+		DELETE tbl_join_group WHERE j_seq = #{j_seq}
  	</delete>
  	
  	<select id="create_group_table">
 		CREATE TABLE IF NOT EXISTS tbl_group(
 			g_seq BIGINT AUTO_INCREMENT PRIMARY KEY,
-			g_name VARCHAR(20) NOT NULL,
+			g_name VARCHAR(20) NOT NULL UNIQUE,
 			g_people INT NOT NULL,
-			g_enddate VARCHAR(13),
+			g_enddate VARCHAR(13)
 		)
  	</select>
  	

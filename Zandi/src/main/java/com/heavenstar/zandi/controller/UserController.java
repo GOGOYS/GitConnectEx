@@ -55,9 +55,18 @@ public class UserController {
 		
 		if(user.password.equals(userVO.password)) {
 			session.setAttribute("USER", userVO);
-			return "redirect:/git/home";
+			return "redirect:/";
 		}
+		model.addAttribute("error","LOGIN_FAIL");
 		return "user/login";
 	}
 
+	
+	@RequestMapping(value="/logout",method=RequestMethod.GET)
+	public String logout(HttpSession session) {
+		
+		session.setAttribute("USER", null);
+		
+		return "redirect:/";
+	}
 }
