@@ -33,10 +33,13 @@ public class GroupController {
 	private GitService gitService;
 	
 	@RequestMapping(value={"/",""},method=RequestMethod.GET)
-	public String group(Model model) {
+	public String group(HttpSession session  ,Model model) {
+		
+		
 		
 		List<GroupVO> groupList = groupService.selectAll();
-		log.debug("아아:{}",groupList);
+		
+		
 		
 		model.addAttribute("GROUPLIST", groupList);
 		
@@ -59,8 +62,23 @@ public class GroupController {
 		GroupVO groupName = groupService.findByGroup(intSeq);
 		group.setJ_gname(groupName.getG_name());
 		group.setJ_username(userVO.username);
-	
+		
+		List<GroupVO> peopleList = groupService.findByGroupPeople(groupName.getG_name());
+		
+		int count =0;
+		for(int i =0; i < peopleList.size(); i++) {
+			
+			if(peopleList.get(i).getJ_username() == userVO.username) {
+				count = 1;
+			}
+			
+		}
 		groupService.insertPeople(group);
+		
+		
+		
+		model.addAttribute("GROUP",groupName);
+		model.addAttribute("PEOPLELIST",peopleList);
 		
 		return "/group/group_in";
 	}

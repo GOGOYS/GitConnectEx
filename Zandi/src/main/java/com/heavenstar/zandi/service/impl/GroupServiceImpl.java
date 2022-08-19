@@ -9,6 +9,9 @@ import com.heavenstar.zandi.model.GroupVO;
 import com.heavenstar.zandi.persistance.GroupDao;
 import com.heavenstar.zandi.service.GroupService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class GroupServiceImpl implements GroupService{
 	
@@ -74,6 +77,7 @@ public class GroupServiceImpl implements GroupService{
 		// TODO Auto-generated method stub
 		
 	}
+
 
 
 }

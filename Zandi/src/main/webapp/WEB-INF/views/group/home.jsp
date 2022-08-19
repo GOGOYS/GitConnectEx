@@ -16,7 +16,14 @@
 		<div>
 			<div>${GROUP.g_name}</div>
 			
-			<a href="${rootPath}/group/join/${GROUP.g_seq}">참가하기</a>
+			<c:choose>
+				<c:when test="${MESSAGE == 'NOTJOIN' }">
+					<a href="${rootPath}/group/join/${GROUP.g_seq}">참가하기</a>				
+				</c:when>
+				<c:otherwise>
+					<a href="${rootPath}/group/group_in/${GROUP.g_seq}">입장하기</a>
+				</c:otherwise>
+			</c:choose>
 		</div>		
 	</c:forEach>
 
